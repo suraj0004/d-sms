@@ -19,4 +19,6 @@ Auth::routes();
 
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 Route::get('/contacts', 'ContactController@index')->name('contacts');
-Route::post('/addClient','ContactController@addClient')->name('addClient');
+Route::post('/addContact','ContactController@addContact')->name('addContact');
+Route::post('/editContact','ContactController@editContact')->name('editContact');
+Route::post('/deleteContact','ContactController@deleteContact')->name('deleteContact');

@@ -62,28 +62,30 @@
                         </b></th>
                       </thead>
                       <tbody>
-      
+      @foreach($contacts as $contact)
                         <tr>
                           <td>
-                          
+                          {{ $loop->iteration }}
                           </td>
-                    <td></td>
-                  <td></td>
+                    <td>
+                    {{ $contact->name }}
+                    </td>
+                  <td>
+                  {{ $contact->email }}
+                  </td>
                 
-                  <td></td>
-                  <td></td> 
+                  <td> {{ $contact->mobile }} </td>
+                  <td>  {{ $contact->created_at }} </td> 
                           <td class="">
-                            <button type="button" class="btn btn-info btn-link btn-sm " data-toggle="modal" data-target="#editContact" onclick="get_edit_details()">
+                            <button type="button" class="btn btn-info btn-link btn-sm " data-toggle="modal" data-target="#editContact" onclick="get_edit_details({{ $contact->id }},'{{ $contact->name }}','{{ $contact->email }}','{{ $contact->mobile }}')">
                                 <i class="material-icons">edit</i>
                               </button>
                           <br>
-                              <button type="button" class="btn btn-danger btn-link btn-sm" data-toggle="modal" data-target="#deleteClientModal" onclick="confirm_delete_client()"><i class="material-icons">delete</i>
+                              <button type="button" class="btn btn-danger btn-link btn-sm" data-toggle="modal" data-target="#deleteClientModal" onclick="confirm_delete_client({{ $contact->id }},'{{ $contact->name }}')"><i class="material-icons">delete</i>
                               </button>
                           </td>
                         </tr>
-                     <?php
-                    // }
-                     ?>          
+               @endforeach              
                       </tbody>
                     </table>
 
@@ -273,12 +275,7 @@
                           <input type="text" class="form-control" name="mobile" id="edit_client_mobile">
                         </div>
                       </div>
-                       <div class="col-md-12">
-                        <div class="form-group">
-                          <label class="">Adress</label>
-                          <input type="text" class="form-control" name="address" id="edit_client_address">
-                        </div>
-                      </div>
+                     
                    
 
                     <button type="button" class="btn btn-danger pull-right" data-dismiss="modal" id="close_edit_client"><i class="material-icons">close</i></button>
@@ -316,52 +313,73 @@ data_table();
   $("#save_add_client").html("<i class='fa fa-spinner fa-spin'></i>");
   $.ajax({
     type: 'POST',
-    url: '{{ route("addClient") }}',
+    url: '{{ route("addContact") }}',
     data: $("#add_client").serialize(),
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     },
-    success: function(status){
-      // console.log(status);
-      window.location.reload();
-      if(status !="201" && status != "203"){
-       $("#refershtable").html(status);
-       data_table();
-        $("#save_add_client").html('<i class="material-icons">check</i>');
+    success: function(response){
+      $("#save_add_client").html('<i class="material-icons">check</i>');
         $("#close_add_client").click();
-               swal({
+       if (response.status == 1) {
+                        swal({
 title: "Added",
-text: "Contact Added Successfully.",
+text: "Contact Added Successfully",
 icon: "success",
  buttons: false,
 timer: 2500,
 });
       }
-      else if(status=="201") {
-
-        // message("error","Something went wrong!");
-                         swal({
+     
+       if (response.status == 0) {
+        swal({
 title: "Opps!",
-text: "Something Went Wrong.",
+text: "Email Already Exists",
 icon: "error",
  buttons: false,
 timer: 2500,
 });
-        $("#save_add_client").html('<i class="material-icons">check</i>');
-        $("#close_add_client").click();
-      }
-      else{
-        // message("info","Contact Already Exist.");
-                                  swal({
-title: "Sorry!",
-text: "Contact Already Exist.",
-icon: "info",
- buttons: false,
-timer: 2500,
-});
-        console.log("inss");
-        $("#save_add_client").html('<i class="material-icons">check</i>');
-      } 
+       }
+      // console.log(status);
+//       window.location.reload();
+//       if(status !="201" && status != "203"){
+//        $("#refershtable").html(status);
+//        data_table();
+//         $("#save_add_client").html('<i class="material-icons">check</i>');
+//         $("#close_add_client").click();
+//                swal({
+// title: "Added",
+// text: "Contact Added Successfully.",
+// icon: "success",
+//  buttons: false,
+// timer: 2500,
+// });
+//       }
+//       else if(status=="201") {
+
+//         // message("error","Something went wrong!");
+//                          swal({
+// title: "Opps!",
+// text: "Something Went Wrong.",
+// icon: "error",
+//  buttons: false,
+// timer: 2500,
+// });
+//         $("#save_add_client").html('<i class="material-icons">check</i>');
+//         $("#close_add_client").click();
+//       }
+//       else{
+//         // message("info","Contact Already Exist.");
+//                                   swal({
+// title: "Sorry!",
+// text: "Contact Already Exist.",
+// icon: "info",
+//  buttons: false,
+// timer: 2500,
+// });
+//         console.log("inss");
+//         $("#save_add_client").html('<i class="material-icons">check</i>');
+//       } 
     }
   });
 }
@@ -451,15 +469,19 @@ document.getElementById('delete_client_id').value = id;
   $("#delete_client_btn").html("<i class='fa fa-spinner fa-spin'></i>");
   $.ajax({
     type: 'POST',
-    url: '../controller/delete_client.php',
+    url: '{{ route("deleteContact") }}',
     data: {"id":id},
-    success: function(status){
-      if(status !="201"){
-        $("#refershtable").html(status);
-        data_table();
-        // message("success","Contact Deleted Successfully");
-        $("#delete_client_btn").html('<i class="material-icons">check</i>');
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    success: function(response){
+      $("#delete_client_btn").html('<i class="material-icons">check</i>');
         $("#delete_client_close_btn").click();
+      if(response.status == 1){
+        // $("#refershtable").html(status);
+        // data_table();
+        // message("success","Contact Deleted Successfully");
+    
                swal({
 title: "Deleted",
 text: "Contact Deleted Successfully.",
@@ -468,7 +490,7 @@ icon: "success",
 timer: 2500,
 });
       }
-      else{
+      if(response.status == 0){
         // message("error","Unable To Delete Contact");
         // $("#confirm").html('Confirm');
                                    swal({
@@ -485,12 +507,12 @@ timer: 2500,
 }
 
 
-function get_edit_details(id,name,email,mobile,address) {
+function get_edit_details(id,name,email,mobile) {
+
 document.getElementById('edit_client_id').value = id;
 document.getElementById('edit_client_name').value = name;
 document.getElementById('edit_client_email').value = email;
 document.getElementById('edit_client_mobile').value = mobile;
-document.getElementById('edit_client_address').value = address;
 
 document.getElementById('edit_client_name').click();
 
@@ -501,18 +523,21 @@ function update_clients() {
 name = document.getElementById('edit_client_name').value;
 email = document.getElementById('edit_client_email').value;
 mobile = document.getElementById('edit_client_mobile').value;
-address = document.getElementById('edit_client_address').value;
   $("#save_edit_client").html("<i class='fa fa-spinner fa-spin'></i>");
   $.ajax({
     type: 'POST',
-    url: '../controller/update_client.php',
-    data: {"id":id,"client_name":name,"email":email,"number":mobile,"address":address},
-    success: function(status){
-      if(status !="201"){
-        $("#save_edit_client").html('<i class="material-icons">check</i>');
+    url: '{{ route("editContact") }}',
+    data: {"id":id,"client_name":name,"email":email,"number":mobile},
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    success: function(response){
+      $("#save_edit_client").html('<i class="material-icons">check</i>');
         $("#close_edit_client").click();
-        $("#refershtable").html(status);
-        data_table();
+      if(response.status == 1){
+       
+        // $("#refershtable").html(status);
+        // data_table();
         // message("success","Contact Updated Successfully.")
                          swal({
 title: "Updated",
@@ -522,7 +547,7 @@ icon: "success",
 timer: 2500,
 });
       }
-      else {
+      if(response.status == 0){
         console.log("Failed");
                          swal({
 title: "Opps!",
