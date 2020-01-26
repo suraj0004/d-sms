@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-class HomeController extends Controller
+class DashboardController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -25,6 +25,8 @@ class HomeController extends Controller
     {
         $data = [
             "name" => Auth::user()->name,
+            "page" => "dashboard",
+            "page_title" => "Dashboard",
         ];
         return view('dashboard')->with($data);
     }
