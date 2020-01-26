@@ -62,27 +62,22 @@
                         </b></th>
                       </thead>
                       <tbody>
-                         <?php
-          //                $Sno = 0;
-          //   $result = mysqli_query($con,"SELECT * FROM tapp_tbl_clients ORDER BY id DESC");
-          //  while($data=mysqli_fetch_array($result)) { 
-          //  	$Sno++;
-            ?>
+      
                         <tr>
                           <td>
-                           <?php //$Sno?>
+                          
                           </td>
-                    <td><?php //echo $data['client_name'];?></td>
-                  <td><?php //echo $data['number']; ?></td>
+                    <td></td>
+                  <td></td>
                 
-                  <td><?php //echo $data['email']; ?></td>
-                  <td><?php //echo $data['created_at']; ?></td> 
+                  <td></td>
+                  <td></td> 
                           <td class="">
-                            <button type="button" class="btn btn-info btn-link btn-sm " data-toggle="modal" data-target="#editContact" onclick="get_edit_details(<?php//$data['id']?>,'<?php//$data['client_name']?>','<?php//$data['email']?>','<?php//$data['number']?>','<?php//$data['address']?>')">
+                            <button type="button" class="btn btn-info btn-link btn-sm " data-toggle="modal" data-target="#editContact" onclick="get_edit_details()">
                                 <i class="material-icons">edit</i>
                               </button>
                           <br>
-                              <button type="button" class="btn btn-danger btn-link btn-sm" data-toggle="modal" data-target="#deleteClientModal" onclick="confirm_delete_client(<?php//$data['id']?>,'<?php//$data['client_name']?>')"><i class="material-icons">delete</i>
+                              <button type="button" class="btn btn-danger btn-link btn-sm" data-toggle="modal" data-target="#deleteClientModal" onclick="confirm_delete_client()"><i class="material-icons">delete</i>
                               </button>
                           </td>
                         </tr>
