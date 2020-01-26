@@ -20,6 +20,7 @@ class ContactController extends Controller
             "page" => "contacts",
             "page_title" => "My Contacts",
         ];
+        print_r($data);die;
         return view('contacts')->with($data);
     }
 
