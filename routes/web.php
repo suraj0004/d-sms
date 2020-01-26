@@ -17,4 +17,6 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/dashboard', 'HomeController@index')->name('dashboard');
+Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+Route::get('/contacts', 'ContactController@index')->name('contacts');
+Route::post('/addClient','ContactController@addClient')->name('addClient');

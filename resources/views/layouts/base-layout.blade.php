@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ $page_title }}</title>
 
     <!-- Scripts -->
     <!-- <script src="{{ asset('js/app.js') }}" defer></script> -->
@@ -106,19 +106,28 @@
       </div>
       <div class="sidebar-wrapper">
         <ul class="nav">
-          <li class="nav-item active echo (page=='dashboard')?'active':'' ">
-            <a class="nav-link" href="./dashboard.php">
+          <li class="nav-item 
+           @if($page == 'dashboard') 
+          active
+          @endif ">
+            <a class="nav-link" href="{{ route('dashboard') }}">
               <i class="material-icons">dashboard</i>
               <p>Dashboard</p>
             </a>
           </li>
-              <li class="nav-item  echo (page=='clients')?'active':'' ">
-            <a class="nav-link" href="./clients.php">
+              <li class="nav-item
+              @if($page == 'contacts') 
+          active
+          @endif ">
+            <a class="nav-link" href="{{ route('contacts') }}">
               <i class="material-icons">contacts</i>
               <p>Contacts</p>
             </a>
           </li>
-       <li class="nav-item dropdown  echo ( isset(base_page) && base_page=='messages')?'active':'' ">
+       <li class="nav-item dropdown
+       @if( @isset($base_page) && $base_page=='messages') 
+          active
+          @endif ">
                 <a class="nav-link" href="" id="MessageDropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="material-icons">messages</i>
                   <span>Compose Mail</span>
@@ -126,10 +135,24 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="MessageDropdownMenu">
                   
-                  <a class="dropdown-item  echo (page=='single message')?'bg-danger text-white':'' " href="single_message.php"><i class="material-icons  echo (page=='single message')?'text-white':'' ">content_paste</i>
+                  <a class="dropdown-item
+                  @if($page == 'single message') 
+                  bg-danger text-white
+                  @endif"
+           href="single_message.php"><i class="material-icons 
+           @if($page == 'single message') 
+                   text-white
+                  @endif ">content_paste</i>
                   <p> Single Mail</p></a>
 
-                  <a class="dropdown-item  echo (page=='bulk messages')?'bg-danger text-white':'' " href="bulk_sms.php"><i class="material-icons  echo (page=='bulk messages')?'text-white':'' ">library_books</i>
+                  <a class="dropdown-item 
+                  @if($page == 'bulk messages') 
+                  bg-danger text-white
+                  @endif "
+                   href="bulk_sms.php"><i class="material-icons 
+                   @if($page == 'bulk messages') 
+                   text-white
+                  @endif ">library_books</i>
                   <p> Bulk Mail</p></a>
 
 
@@ -137,7 +160,10 @@
                 </div>
               </li>
 
-           <li class="nav-item  echo (page=='received_messages_new')?'active':'' ">
+           <li class="nav-item 
+           @if($page == 'received_messages_new') 
+          active
+          @endif ">
             <a class="nav-link" href="./received_messages_new.php">
               <i class="material-icons">inbox</i>
               <p>Inbox</p>
@@ -145,14 +171,20 @@
           </li>
 
 
-              <li class="nav-item echo (page=='sent_messages')?'active':'' ">
+              <li class="nav-item 
+              @if($page == 'sent_messages') 
+          active
+          @endif ">
             <a class="nav-link" href="./sent_messages.php">
               <i class="material-icons">send</i>
               <p>Outbox</p>
             </a>
           </li>
 
-          <li class="nav-item echo (page=='sent_messages')?'active':'' ">
+          <li class="nav-item
+          @if($page == 'draft') 
+          active
+          @endif ">
             <a class="nav-link" href="./sent_messages.php">
               <i class="material-icons">folder</i>
               <p>Draft</p>
@@ -160,14 +192,21 @@
           </li>
         
     
-           <li class="nav-item  echo (page=='add_group_numbers')?'active':'' ">
+           <li class="nav-item 
+           @if($page == 'add_group_numbers') 
+          active
+          @endif
+           ">
             <a class="nav-link" href="./add_group_numbers.php">
               <i class="material-icons">group</i>
               <p>Groups</p>
             </a>
           </li>
 
-         <li class="nav-item  echo (page=='templates')?'active':'' ">
+         <li class="nav-item 
+         @if($page == 'templates') 
+          active
+          @endif ">
             <a class="nav-link" href="./templates.php">
               <i class="material-icons">book</i>
               <p>Template</p>
@@ -182,14 +221,20 @@
           </li> -->
 
     
-      <li class="nav-item echo (page=='pending_numbers')?'active':'' ">
+      <li class="nav-item
+      @if($page == 'pending_numbers') 
+          active
+          @endif ">
             <a class="nav-link" href="./pending_numbers.php">
               <i class="material-icons">queue</i>
               <p>Pending Mails</p>
             </a>
           </li>
           
-           <li class="nav-item echo (page=='failed_numbers')?'active':'' ">
+           <li class="nav-item 
+           @if($page == 'failed_numbers') 
+          active
+          @endif ">
             <a class="nav-link" href="./failed_numbers.php">
               <i class="material-icons">error</i>
               <p>Failed Mails</p>
@@ -206,7 +251,7 @@
       <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
         <div class="container-fluid">
           <div class="navbar-wrapper">
-            <a class="navbar-brand" href="#pablo">Dashboard</a>
+            <a class="navbar-brand" href="#pablo"> {{$page_title}} </a>
           </div>
           <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
             <span class="sr-only">Toggle navigation</span>
@@ -231,16 +276,25 @@
                   <a class="dropdown-item" href="#">Profile</a>
                   <!-- <a class="dropdown-item" href="#">Settings</a> -->
                   <div class="dropdown-divider"></div>
-                  <button class="dropdown-item text-center" onclick="logout()">Log out</button>
+                  <a class="dropdown-item" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a>
+
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
                 </div>
               </li>
             </ul>
           </div>
         </div>
       </nav>
-        <main class="py-4">
+       
+        
             @yield('content')
-        </main>
+       
     
 
 
@@ -345,6 +399,7 @@
 
     });
 
+         // old logout code
           function logout() {
            $.ajax({
             type: 'GET',
