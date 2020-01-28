@@ -296,7 +296,8 @@
 @endsection
 
 @push('scripts')
-<script>
+
+<script type="text/javascript">
 
 function data_table() {
   var table = $('#clients_table').DataTable({
