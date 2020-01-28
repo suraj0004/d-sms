@@ -125,7 +125,7 @@
             </a>
           </li>
        <li class="nav-item dropdown
-       @if( @isset($base_page) && $base_page=='messages') 
+       @if( @isset($base_page) && $base_page=='mail') 
           active
           @endif ">
                 <a class="nav-link" href="" id="MessageDropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -136,21 +136,21 @@
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="MessageDropdownMenu">
                   
                   <a class="dropdown-item
-                  @if($page == 'single message') 
+                  @if($page == 'single mail') 
                   bg-danger text-white
                   @endif"
-           href="single_message.php"><i class="material-icons 
-           @if($page == 'single message') 
+           href="{{ route('singlemail') }}"><i class="material-icons 
+           @if($page == 'single mail') 
                    text-white
                   @endif ">content_paste</i>
                   <p> Single Mail</p></a>
 
                   <a class="dropdown-item 
-                  @if($page == 'bulk messages') 
+                  @if($page == 'bulk mail') 
                   bg-danger text-white
                   @endif "
-                   href="bulk_sms.php"><i class="material-icons 
-                   @if($page == 'bulk messages') 
+                   href="{{ route('bulkmail') }}"><i class="material-icons 
+                   @if($page == 'bulk mail') 
                    text-white
                   @endif ">library_books</i>
                   <p> Bulk Mail</p></a>
@@ -161,10 +161,10 @@
               </li>
 
            <li class="nav-item 
-           @if($page == 'received_messages_new') 
+           @if($page == 'inbox') 
           active
           @endif ">
-            <a class="nav-link" href="./received_messages_new.php">
+            <a class="nav-link" href="{{ route('inbox') }}">
               <i class="material-icons">inbox</i>
               <p>Inbox</p>
             </a>
@@ -172,10 +172,10 @@
 
 
               <li class="nav-item 
-              @if($page == 'sent_messages') 
+              @if($page == 'outbox') 
           active
           @endif ">
-            <a class="nav-link" href="./sent_messages.php">
+            <a class="nav-link" href="{{ route('outbox') }}">
               <i class="material-icons">send</i>
               <p>Outbox</p>
             </a>
@@ -185,7 +185,7 @@
           @if($page == 'draft') 
           active
           @endif ">
-            <a class="nav-link" href="./sent_messages.php">
+            <a class="nav-link" href="{{ route('draft') }}">
               <i class="material-icons">folder</i>
               <p>Draft</p>
             </a>
@@ -193,13 +193,13 @@
         
     
            <li class="nav-item 
-           @if($page == 'add_group_numbers') 
+           @if($page == 'groups') 
           active
           @endif
            ">
-            <a class="nav-link" href="./add_group_numbers.php">
+            <a class="nav-link" href="{{ route('groups') }}">
               <i class="material-icons">group</i>
-              <p>Groups</p>
+              <p>Group's</p>
             </a>
           </li>
 
@@ -207,9 +207,9 @@
          @if($page == 'templates') 
           active
           @endif ">
-            <a class="nav-link" href="./templates.php">
+            <a class="nav-link" href="{{ route('templates') }}">
               <i class="material-icons">book</i>
-              <p>Template</p>
+              <p>Template's</p>
             </a>
           </li>
 
@@ -222,22 +222,22 @@
 
     
       <li class="nav-item
-      @if($page == 'pending_numbers') 
+      @if($page == 'pending mails') 
           active
           @endif ">
-            <a class="nav-link" href="./pending_numbers.php">
+            <a class="nav-link" href="{{ route('pendingmails') }}">
               <i class="material-icons">queue</i>
-              <p>Pending Mails</p>
+              <p>Pending Mail's</p>
             </a>
           </li>
           
            <li class="nav-item 
-           @if($page == 'failed_numbers') 
+           @if($page == 'failed mails') 
           active
           @endif ">
-            <a class="nav-link" href="./failed_numbers.php">
+            <a class="nav-link" href="{{ route('failedmails') }}">
               <i class="material-icons">error</i>
-              <p>Failed Mails</p>
+              <p>Failed Mail's</p>
             </a>
           </li>
 
@@ -273,7 +273,7 @@
                   </p>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right text-center" aria-labelledby="navbarDropdownProfile">
-                  <a class="dropdown-item" href="#">Profile</a>
+                  <a class="dropdown-item" href="{{ route('myProfile') }}">My Profile</a>
                   <!-- <a class="dropdown-item" href="#">Settings</a> -->
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="{{ route('logout') }}"
