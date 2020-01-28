@@ -14598,7 +14598,7 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 .sidebar .nav li .dropdown-menu a:focus,
 .sidebar .nav li.active>[data-toggle="collapse"] {
   background-color: #f44336;
-  color: #3C4858;
+  color: white;
   box-shadow: none;
 }
 
