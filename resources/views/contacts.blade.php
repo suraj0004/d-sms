@@ -298,18 +298,17 @@
 @push('scripts')
 
 <script type="text/javascript">
-
+var table;
 function data_table() {
-  var table = $('#clients_table').DataTable({
-     "stateSave": true
+ table = $('#clients_table').DataTable({
+     "stateSave": true,
+    //  ordering: false
   });  
   // table
   // .order( [ 4, 'desc' ] )
   // .draw();
 }
-
 data_table();
-
   function add_client(){
   $("#save_add_client").html("<i class='fa fa-spinner fa-spin'></i>");
   $.ajax({
@@ -323,6 +322,7 @@ data_table();
       $("#save_add_client").html('<i class="material-icons">check</i>');
         $("#close_add_client").click();
        if (response.status == 1) {
+         
                         swal({
 title: "Added",
 text: "Contact Added Successfully",
@@ -330,6 +330,17 @@ icon: "success",
  buttons: false,
 timer: 2500,
 });
+var data = response.data;
+table.row.add( [
+           '<i class="fa fa-star text-warning" aria-hidden="true"></i>',
+           data.name,
+           data.email,
+           data.mobile,
+           data.saved_on,
+          '<button type="button" class="btn btn-info btn-link btn-sm " data-toggle="modal" data-target="#editContact" onclick="get_edit_details('+ data.id+','+ data.name+','+ data.email +','+ data.mobile +')"><i class="material-icons">edit</i></button><br><button type="button" class="btn btn-danger btn-link btn-sm" data-toggle="modal" data-target="#deleteClientModal" onclick="confirm_delete_client('+ data.id+','+ data.name+')"><i class="material-icons">delete</i> </button>'] ).draw( false );
+        
+        // table.order([0, 'asc']).draw();
+    //  table.page('first').draw(false);
       }
      
        if (response.status == 0) {

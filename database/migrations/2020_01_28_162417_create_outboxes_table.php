@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddUserIdToContactsTable extends Migration
+class CreateOutboxesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,12 @@ class AddUserIdToContactsTable extends Migration
      */
     public function up()
     {
-        Schema::table('contacts', function (Blueprint $table) {
+        Schema::create('outboxes', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('receiver');
+            $table->text('description');
             $table->bigInteger('user_id');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +29,6 @@ class AddUserIdToContactsTable extends Migration
      */
     public function down()
     {
-        Schema::table('contacts', function (Blueprint $table) {
-          
-        });
+        Schema::dropIfExists('outboxes');
     }
 }

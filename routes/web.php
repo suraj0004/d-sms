@@ -61,7 +61,7 @@ Route::get('/outbox', function () {
 
 Route::get('/draft', function () {
     return view('draft')->with([
-            "page" => "drafts",
+            "page" => "draft",
             "page_title" => "Draft",
     ]);
 })->name('draft');
