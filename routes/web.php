@@ -113,3 +113,5 @@ Route::get('/myprofile', function () {
 Route::post('/addContact','ContactController@addContact')->name('addContact');
 Route::post('/editContact','ContactController@editContact')->name('editContact');
 Route::post('/deleteContact','ContactController@deleteContact')->name('deleteContact');
+Route::post('/importContacts','ContactController@importContacts')->name('importContacts');
+Route::get('/exportContacts','ContactController@exportContacts')->name('exportContacts');
