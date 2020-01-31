@@ -9,7 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     use Notifiable;
-
+    // use SoftDeletes;
     /**
      * The attributes that are mass assignable.
      *
@@ -36,4 +36,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function contacts()
+    {
+        return $this->hasMany('App\Contact');
+    }
 }
