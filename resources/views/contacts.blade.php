@@ -11,20 +11,21 @@
 
  <div class="row">
                <div class="col-sm-12 col-md-3">
-                  <button  type="button" class="btn btn-danger btn-block" data-toggle="modal" data-target="#addContact"> <i class="material-icons">person</i> &nbsp; Add New Contact</button>
+                  <button  type="button" class="btn btn-danger btn-block font-weight-bold" data-toggle="modal" data-target="#addContact"> <i class="material-icons">person</i> &nbsp; Add New Contact</button>
                </div>
               
 
                 <div class="col-sm-12 col-md-3"> 
-                  <button class="btn btn-success  btn-block" type="button" data-target="#importExcel" data-toggle="modal"><i class="material-icons">content_paste</i> &nbsp; Import Excel</button>
+                  <button class="btn btn-success  btn-block font-weight-bold" type="button" data-target="#importExcel" data-toggle="modal"><i class="material-icons">content_paste</i> &nbsp; Import Contacts</button>
                 </div>
 
                 <div class="col-sm-12 col-md-3">
-                            <a href="../assets/files/sample_contact.xlsx" download class="btn btn-info btn-block"><i class="material-icons">library_books</i> &nbsp; Sample file</a>
+                <a class="btn btn-default btn-block font-weight-bold" href='{{ asset("assets/sample_contact.xlsx") }}' download><i class="material-icons">library_books</i> &nbsp; Sample Import/Export</a>
                 </div>
 
                 <div class="col-sm-12 col-md-3">
-                  <button class="btn btn-primary btn-block"><i class="material-icons">book</i> &nbsp; Export Data</button>
+                <a class="btn btn-primary btn-block font-weight-bold" href="{{ route('exportContacts') }}"><i class="material-icons">book</i> &nbsp; Export Contacts</a>
+               
                 </div>
 
      </div>
@@ -77,11 +78,11 @@
                   <td> {{ $contact->mobile }} </td>
                   <td>  {{ $contact->created_at }} </td> 
                           <td class="">
-                            <button type="button" class="btn btn-info btn-link btn-sm " data-toggle="modal" data-target="#editContact" onclick="get_edit_details({{ $contact->id }},'{{ $contact->name }}','{{ $contact->email }}','{{ $contact->mobile }}')">
+                            <button type="button" class="btn btn-info btn-link btn-sm " data-toggle="modal" data-target="#editContact" onclick="get_edit_details({{ $contact->id }},'{{ $contact->name }}','{{ $contact->email }}','{{ $contact->mobile }}',(this.parentNode).parentNode)">
                                 <i class="material-icons">edit</i>
                               </button>
                           <br>
-                              <button type="button" class="btn btn-danger btn-link btn-sm" data-toggle="modal" data-target="#deleteClientModal" onclick="confirm_delete_client({{ $contact->id }},'{{ $contact->name }}')"><i class="material-icons">delete</i>
+                              <button type="button" class="btn btn-danger btn-link btn-sm" data-toggle="modal" data-target="#deleteClientModal" onclick="confirm_delete_client({{ $contact->id }},'{{ $contact->name }}',(this.parentNode).parentNode)"><i class="material-icons">delete</i>
                               </button>
                           </td>
                         </tr>
@@ -174,7 +175,7 @@
                  
                 </div>
                 <div class="card-body">
-                  <form id="import_form" method="post" action="../controller/import_clients.php"  >
+                  <form id="import_form" method="post" action=""  >
                   	 <div class="col-md-12">
                         <div class="form-group">
                           <label class="bmd-label-floating" for="file">Click here to Import file</label>
@@ -296,7 +297,7 @@
 @endsection
 
 @push('scripts')
-
+<!-- <script   type="text/javascript" src="{{ asset('assets/js/plugins/jquery-download.js') }}"></script> -->
 <script type="text/javascript">
 var table;
 function data_table() {
@@ -331,13 +332,15 @@ icon: "success",
 timer: 2500,
 });
 var data = response.data;
+edit_row = data.id+",'"+data.name+"','"+data.email+"','"+data.mobile+"'";
+delete_row = data.id+",'"+data.name+"'";
 table.row.add( [
            '<i class="fa fa-star text-warning" aria-hidden="true"></i>',
            data.name,
            data.email,
            data.mobile,
            data.saved_on,
-          '<button type="button" class="btn btn-info btn-link btn-sm " data-toggle="modal" data-target="#editContact" onclick="get_edit_details('+ data.id+','+ data.name+','+ data.email +','+ data.mobile +')"><i class="material-icons">edit</i></button><br><button type="button" class="btn btn-danger btn-link btn-sm" data-toggle="modal" data-target="#deleteClientModal" onclick="confirm_delete_client('+ data.id+','+ data.name+')"><i class="material-icons">delete</i> </button>'] ).draw( false );
+          '<button type="button" class="btn btn-info btn-link btn-sm " data-toggle="modal" data-target="#editContact" onclick="get_edit_details('+ edit_row +',(this.parentNode).parentNode)"><i class="material-icons">edit</i></button><br><button type="button" class="btn btn-danger btn-link btn-sm" data-toggle="modal" data-target="#deleteClientModal" onclick="confirm_delete_client('+ delete_row +',(this.parentNode).parentNode)"><i class="material-icons">delete</i> </button>'] ).draw( false );
         
         // table.order([0, 'asc']).draw();
     //  table.page('first').draw(false);
@@ -405,74 +408,55 @@ timer: 2500,
   var data = new FormData(form);
   $.ajax({
     type: 'POST',
-    url: '../controller/import_clients.php',
+    url: '{{ route("importContacts") }}',
     data: data,
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
       enctype: 'multipart/form-data',
       processData: false,  // Important!
       contentType: false,
       cache: false,
     success: function(res){
-      // console.log(status);
+      $("#import_client_btn").html('<i class="material-icons">check</i>');
+        $("#import_client_close_btn").click();
+      // console.log(res);
       // var response = JSON.parse(res);
-      if(res  == 201){
-                                  swal({
-title: "Opps!",
-text: "Sorry! there was an error to import Clients.",
-icon: "error",
- buttons: false,
-timer: 2500,
-});
-
-      }
-      else if(res == 203) {
-
-                         swal({
-title: "Opps!",
-text: "Invalid file format. Please select excel or csv file.",
-icon: "info",
- buttons: false,
-timer: 2500,
-});
-     
-
-
-      }
-         else if(res.search("Return Code") != -1) {
-
-                         swal({
-title: "Opps!",
-text: res,
-icon: "error",
- buttons: false,
-timer: 2500,
-});
-     
-
-
-      }
-      else{
-                     $("#refershtable").html(res);
-                     data_table();
-       
-               swal({
+      if(res.status  == 1){
+        swal({
 title: "Imported",
-text: "Congrats! Clients imported successfully.",
+text: res.message,
 icon: "success",
  buttons: false,
 timer: 2500,
 });
-      } 
-        $("#import_client_btn").html('<i class="material-icons">check</i>');
-        $("#import_client_close_btn").click();
 
+      }
+       if(res.status == 0) {
+
+        swal({
+title: "Opps!",
+text: res.message,
+icon: "error",
+ buttons: false,
+timer: 2500,
+});
+     
+
+
+      }
+
+ 
     }
   });
 }
 
 
 
-
-function confirm_delete_client(id,name) {
+var tr_index;
+function confirm_delete_client(id,name,tr) {
+  // console.log(tr.rowIndex);
+ tr_index = tr.rowIndex;
 document.getElementById('delete_client_id').value = id;
  document.getElementById('delete_client_name').innerHTML = name;
 }
@@ -493,7 +477,7 @@ document.getElementById('delete_client_id').value = id;
         // $("#refershtable").html(status);
         // data_table();
         // message("success","Contact Deleted Successfully");
-    
+        document.getElementById('clients_table').deleteRow(tr_index);
                swal({
 title: "Deleted",
 text: "Contact Deleted Successfully.",
@@ -518,9 +502,10 @@ timer: 2500,
   });
 }
 
-
-function get_edit_details(id,name,email,mobile) {
-
+var parent_tr;
+function get_edit_details(id,name,email,mobile,tr) {
+  parent_tr = tr;
+ 
 document.getElementById('edit_client_id').value = id;
 document.getElementById('edit_client_name').value = name;
 document.getElementById('edit_client_email').value = email;
@@ -548,6 +533,10 @@ mobile = document.getElementById('edit_client_mobile').value;
         $("#close_edit_client").click();
       if(response.status == 1){
        
+        parent_tr.children[0].innerHTML = '<i class="fa fa-star text-warning" aria-hidden="true"></i>';
+        parent_tr.children[1].innerHTML = name;
+        parent_tr.children[2].innerHTML = email;
+        parent_tr.children[3].innerHTML = mobile;
         // $("#refershtable").html(status);
         // data_table();
         // message("success","Contact Updated Successfully.")
@@ -574,6 +563,12 @@ timer: 2500,
   });
 }
 
+
+// function downloadSmaple(){
+//   $.fileDownload('{{ asset("assets/sample_contact.xlsx") }}')
+//     .done(function () { alert('File download a success!'); })
+//     .fail(function () { alert('File download failed!'); });
+// }
 
 </script>
 @endpush

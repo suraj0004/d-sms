@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Contact;
 use Exception;
+use App\Exports\ContactsExport;
+use App\Imports\ContactsImport;
+use Maatwebsite\Excel\Facades\Excel;
 class ContactController extends Controller
 {
    
@@ -119,5 +122,31 @@ class ContactController extends Controller
 
     }
 
+
+
+    public function importContacts() 
+    {
+        // try {
+            Excel::import(new ContactsImport,request()->file('file'));
+            return response()->json([
+                "status" => 1,
+                "message" => "Congrats! Clients imported successfully.",
+               
+             ]);
+        // } catch (Exception $e) {
+        //     return response()->json([
+        //         "status" => 0,
+        //         "error" => "Opps! Something went wrong",
+        //         'message' => $e->getMessage(),
+        //      ]);
+        // }
+        
+      
+    }
+
+    public function exportContacts() 
+    {
+        return Excel::download(new ContactsExport, 'contacts.xlsx');
+    }
 
 }
