@@ -47,6 +47,7 @@ class LoginController extends Controller
 
     public function handleGoogleCallback()
     {
+        //die;
         try {
   
             $user = Socialite::driver('google')->user();
@@ -60,19 +61,27 @@ class LoginController extends Controller
                  return redirect('/dashboard');
    
             }else{
+                $finduser = User::where('email', $user->email)->first();
+                if($finduser){
+                    return redirect('google');
+                }
                 $newUser = User::create([
                     'name' => $user->name,
                     'email' => $user->email,
+                    'password' => md5(mt_rand(10000,999999)),
                     'google_id'=> $user->id
                 ]);
   
                 Auth::login($newUser);
    
-                return redirect()->back();
+                return redirect('/dashboard');
+                //return redirect()->back();
             }
   
         } catch (Exception $e) {
-            return redirect('auth/google');
+            // echo $e->getMessage();
+            // die;
+            return redirect('google');
         }
     }
 }
