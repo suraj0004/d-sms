@@ -34,4 +34,10 @@ return [
         'secret' => env('SPARKPOST_SECRET'),
     ],
 
+    'google' => [
+        'client_id' => '327948054466-8ubent4i3rvtsqehmtho4ac4n7kahaf7.apps.googleusercontent.com',
+        'client_secret' => 'nc6Gn4b7s6ZX1CNznIXi3Lu2',
+        'redirect' => 'http://email-module.disc-in.com/auth/google/callback',
+    ],
+
 ];
