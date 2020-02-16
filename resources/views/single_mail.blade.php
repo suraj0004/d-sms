@@ -18,20 +18,20 @@
                       <div class="col-md-6 form-group" id="reciver_dropdown">
                         
                           <label class="">Select Reciver</label>
-                          <select class="form-control" id="client" name="client" style="text-align: center;" onchange="run()">
-                            <option value="">--Select--</option>
-                         
-                        <option value="test">Test</option>
-                       
+                          <select class="form-control" id="contact" name="contact" style="text-align: center;" onchange="setContactEmail(this.value)">
+                             <option value="">-- Select --</option>
+                           @foreach($contacts as $contact)
+                                <option value="{{$contact->email}}" > {{$contact->name}} </option>
+                           @endforeach
                           </select>
                         
                       </div>
                       <div class="col-md-6 ">
-                      	<label class="">Reciver Contact Number</label>
+                      	<label class="">Reciver Email</label>
                         <div class="form-group row">
 
-                          <div class="col-md-1"><label class=""><i class="material-icons">perm_phone_msg</i></label></div>
-                          <div class="col-md-10"><input id="client_number" name="client_number" type="number" class="form-control"></div>
+                          <div class="col-md-1"><label class=""><i class="material-icons">inbox</i></label></div>
+                          <div class="col-md-10"><input id="contact_email" name="contact_email" type="text" class="form-control"></div>
                         </div>
                       </div>
                     </div>
@@ -225,8 +225,8 @@ $('#reciver_dropdown').dropdown({
 
   // callback
   choice: function () {
-  var value = $("#client :selected").val();
-      $('#client_number').val(value);
+  var value = $("#contact :selected").val();
+      $('#contact_email').val(value);
   },
 
   // custom props
@@ -436,6 +436,7 @@ $('#template_message_dropdown').dropdown({
     }     
   });
 }
+
 
 
 

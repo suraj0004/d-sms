@@ -47,41 +47,43 @@ class LoginController extends Controller
 
     public function handleGoogleCallback()
     {
-        //die;
-        try {
-  
-            $user = Socialite::driver('google')->user();
-   
-            $finduser = User::where('google_id', $user->id)->first();
-   
-            if($finduser){
-   
-                Auth::login($finduser);
-  
-                 return redirect('/dashboard');
-   
-            }else{
-                $finduser = User::where('email', $user->email)->first();
-                if($finduser){
-                    return redirect('google');
-                }
-                $newUser = User::create([
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'password' => md5(mt_rand(10000,999999)),
-                    'google_id'=> $user->id
-                ]);
-  
-                Auth::login($newUser);
-   
-                return redirect('/dashboard');
-                //return redirect()->back();
-            }
-  
-        } catch (Exception $e) {
-            // echo $e->getMessage();
-            // die;
-            return redirect('google');
+        $getInfo = Socialite::driver('google')->user();
+        $finduser = User::where('email', $getInfo->email)->first();
+        if($finduser){
+            return redirect('/');
         }
+        $user = $this->createUser($getInfo, 'google');
+        Auth::login($user);
+        return redirect('/dashboard');
+    }
+
+    public function redirectToFacebook()
+    {
+        return Socialite::driver('facebook')->redirect();
+    }
+    public function handleFacebookCallback()
+    {
+        $getInfo = Socialite::driver('facebook')->user();
+        $finduser = User::where('email', $getInfo->email)->first();
+        if($finduser){
+            return redirect('/');
+        }
+        $user = $this->createUser($getInfo, 'facebook');
+        Auth::login($user);
+        return redirect('/dashboard');
+    }
+    function createUser($getInfo, $provider)
+    {
+        $user = User::where('provider_id', $getInfo->id)->first();
+        if (!$user) {
+            $user = User::create([
+                'name' => $getInfo->name,
+                'email' => $getInfo->email,
+                'provider' => $provider,
+                'provider_id' => $getInfo->id,
+                'password' => md5(mt_rand(10000,999999)),
+            ]);
+        }
+        return $user;
     }
 }
