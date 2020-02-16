@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\SingleMail;
+use App\User;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 class SingleMailController extends Controller
 {
     /**
@@ -12,9 +13,25 @@ class SingleMailController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('auth');
+        ini_set('memory_limit', '-1');
+       
+    }
     public function index()
     {
-        //
+        $user_id = Auth::id();
+        $contacts = User::findOrFail($user_id)->contacts()->orderBy('created_at','desc')->get();
+        $data = [
+            "name" => Auth::user()->name,
+            "base_page" => "mail",
+            "page" => "single mail",
+            "page_title" => "Compose Single Mail",
+            "contacts" => $contacts,
+        ];
+        // print_r($data);die;
+        return view('single_mail')->with($data);
     }
 
     /**

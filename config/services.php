@@ -40,4 +40,10 @@ return [
         'redirect' => 'http://email-module.disc-in.com/auth/google/callback',
     ],
 
+    'facebook' => [
+        'client_id' => '493684311295502',
+        'client_secret' => '1543cd7749557f0a9482147e148226b6',
+        'redirect' => 'http://email-module.disc-in.com/auth/facebook/callback',
+      ], 
+
 ];

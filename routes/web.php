@@ -20,14 +20,14 @@ Auth::routes();
 /* View Routes */
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 Route::get('/contacts', 'ContactController@index')->name('contacts');
-// Route::get('/singlemail', 'DashboardController@index')->name('singlemail');
-Route::get('/singlemail', function () {
-    return view('single_mail')->with([
-            "base_page" => "mail",
-            "page" => "single mail",
-            "page_title" => "Compose Single Mail",
-    ]);
-})->name('singlemail');
+Route::get('/singlemail', 'SingleMailController@index')->name('singlemail');
+// Route::get('/singlemail', function () {
+//     return view('single_mail')->with([
+//             "base_page" => "mail",
+//             "page" => "single mail",
+//             "page_title" => "Compose Single Mail",
+//     ]);
+// })->name('singlemail');
 // Route::get('/bulkmail', 'ContactController@index')->name('bulkmail');
 Route::get('/bulkmail', function () {
     return view('bulk_mail')->with([
@@ -121,5 +121,8 @@ Route::get('google', function () {
     return view('googleAuth');
 });
     
-Route::get('auth/google', 'Auth\LoginController@redirectToGoogle');
-Route::get('auth/google/callback', 'Auth\LoginController@handleGoogleCallback');
+Route::get('/auth/google', 'Auth\LoginController@redirectToGoogle');
+Route::get('/auth/google/callback', 'Auth\LoginController@handleGoogleCallback');
+
+Route::get('/auth/facebook', 'Auth\LoginController@redirectToFacebook');
+Route::get('/auth/facebook/callback', 'Auth\LoginController@handleFacebookCallback');
