@@ -52,4 +52,3 @@ GOOGLE_REDIRECT_URL=http://email-module.disc-in.com/auth/google/callback
 FACEBOOK_CLIENT_ID=493684311295502
 FACEBOOK_CLIENT_SECRET=1543cd7749557f0a9482147e148226b6
 FACEBOOK_REDIRECT_URL=http://email-module.disc-in.com/auth/facebook/callback
-
