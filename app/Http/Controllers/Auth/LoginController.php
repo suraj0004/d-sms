@@ -48,9 +48,14 @@ class LoginController extends Controller
     public function handleGoogleCallback()
     {
         $getInfo = Socialite::driver('google')->user();
+        $finduser = User::where('provider_id', $getInfo->id)->first();
+        if($finduser){
+            Auth::login($finduser);
+            return redirect('/dashboard');
+        }
         $finduser = User::where('email', $getInfo->email)->first();
         if($finduser){
-            return redirect('/');
+            return redirect('/login')->withErrors(['error' => 'The email already exists. Try forgot password!']);
         }
         $user = $this->createUser($getInfo, 'google');
         Auth::login($user);
@@ -64,9 +69,14 @@ class LoginController extends Controller
     public function handleFacebookCallback()
     {
         $getInfo = Socialite::driver('facebook')->user();
+        $finduser = User::where('provider_id', $getInfo->id)->first();
+        if($finduser){
+            Auth::login($finduser);
+            return redirect('/dashboard');
+        }
         $finduser = User::where('email', $getInfo->email)->first();
         if($finduser){
-            return redirect('/');
+            return redirect('/login')->withErrors(['error' => 'The email already exists. Try forgot password!']);
         }
         $user = $this->createUser($getInfo, 'facebook');
         Auth::login($user);
@@ -86,4 +96,5 @@ class LoginController extends Controller
         }
         return $user;
     }
+  
 }
